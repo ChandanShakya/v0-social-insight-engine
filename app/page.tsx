@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Loader2, TrendingUp, Users, MessageSquare, Heart, BarChart3, Sparkles } from "lucide-react"
+import { Loader2, Users, MessageSquare, Heart, BarChart3, Sparkles, Moon, Sun } from "lucide-react"
 import { AnalysisOutput } from "@/components/analysis-output"
 import { MotivationSection } from "@/components/motivation-section"
 
@@ -11,6 +11,12 @@ export default function Page() {
   const [appState, setAppState] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [analysisData, setAnalysisData] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
+  const [theme, setTheme] = useState<"light" | "dark">("dark")
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark")
+    setTheme(isDark ? "dark" : "light")
+  }, [])
 
   const handleAnalyze = async () => {
     setAppState("loading")
@@ -35,11 +41,22 @@ export default function Page() {
     }
   }
 
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark"
+    setTheme(newTheme)
+    document.documentElement.classList.toggle("dark", newTheme === "dark")
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 md:py-16">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
+          <div className="flex justify-end mb-4">
+            <Button variant="outline" size="icon" onClick={toggleTheme}>
+              {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </Button>
+          </div>
           <div className="inline-flex items-center gap-2 mb-4">
             <BarChart3 className="w-8 h-8 text-primary" />
             <h1 className="text-4xl md:text-5xl font-bold text-balance">Social Insight Engine</h1>
@@ -49,8 +66,7 @@ export default function Page() {
           </p>
         </div>
 
-        {/* Stats Grid - Always Visible */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           <Card className="p-6 border-border/50">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-lg bg-chart-1/10 flex items-center justify-center">
@@ -79,16 +95,6 @@ export default function Page() {
             </div>
             <div className="text-2xl font-bold">Content</div>
             <div className="text-sm text-muted-foreground">Performance</div>
-          </Card>
-
-          <Card className="p-6 border-border/50">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-lg bg-chart-4/10 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-chart-4" />
-              </div>
-            </div>
-            <div className="text-2xl font-bold">Trends</div>
-            <div className="text-sm text-muted-foreground">Insights</div>
           </Card>
         </div>
 

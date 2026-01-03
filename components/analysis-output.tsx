@@ -2,6 +2,8 @@
 
 import { Card } from "@/components/ui/card"
 import { TrendingUp, TrendingDown, Users, Heart, MessageSquare, Eye } from "lucide-react"
+import { Line, LineChart, Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 interface AnalysisOutputProps {
   data: any
@@ -20,6 +22,20 @@ export function AnalysisOutput({ data }: AnalysisOutputProps) {
     { title: "Product Launch Announcement", engagement: 2450, likes: 1820, comments: 320 },
     { title: "Behind the Scenes Content", engagement: 1890, likes: 1520, comments: 210 },
     { title: "Customer Success Story", engagement: 1650, likes: 1340, comments: 180 },
+  ]
+
+  const engagementOverTime = [
+    { date: "Week 1", engagement: 5.2 },
+    { date: "Week 2", engagement: 6.1 },
+    { date: "Week 3", engagement: 7.4 },
+    { date: "Week 4", engagement: 8.2 },
+  ]
+
+  const contentPerformance = [
+    { type: "Video", count: 120 },
+    { type: "Image", count: 85 },
+    { type: "Carousel", count: 65 },
+    { type: "Text", count: 45 },
   ]
 
   return (
@@ -112,6 +128,58 @@ export function AnalysisOutput({ data }: AnalysisOutputProps) {
           </div>
         </Card>
       </div>
+
+      <Card className="p-6 md:p-8 border-border/50">
+        <h3 className="text-xl font-bold mb-6">Engagement Over Time</h3>
+        <ChartContainer
+          config={{
+            engagement: {
+              label: "Engagement Rate",
+              color: "hsl(var(--chart-2))",
+            },
+          }}
+          className="h-[300px]"
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={engagementOverTime} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis dataKey="date" className="text-xs" />
+              <YAxis className="text-xs" />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Line
+                type="monotone"
+                dataKey="engagement"
+                stroke="var(--color-engagement)"
+                strokeWidth={2}
+                dot={{ fill: "var(--color-engagement)", r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </Card>
+
+      <Card className="p-6 md:p-8 border-border/50">
+        <h3 className="text-xl font-bold mb-6">Content Type Performance</h3>
+        <ChartContainer
+          config={{
+            count: {
+              label: "Engagements",
+              color: "hsl(var(--chart-1))",
+            },
+          }}
+          className="h-[300px]"
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={contentPerformance} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis dataKey="type" className="text-xs" />
+              <YAxis className="text-xs" />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="count" fill="var(--color-count)" radius={[8, 8, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </Card>
 
       {/* Top Performing Posts */}
       <Card className="p-6 md:p-8 border-border/50">
