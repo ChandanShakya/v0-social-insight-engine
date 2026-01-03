@@ -2,8 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { TrendingUp, TrendingDown, Users, Heart, MessageSquare, Eye } from "lucide-react"
-import { Line, LineChart, Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Line, LineChart, Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from "recharts"
 
 interface AnalysisOutputProps {
   data: any
@@ -37,6 +36,9 @@ export function AnalysisOutput({ data }: AnalysisOutputProps) {
     { type: "Carousel", count: 65 },
     { type: "Text", count: 45 },
   ]
+
+  const chartColor1 = "hsl(142 71% 45%)"
+  const chartColor2 = "hsl(217 91% 60%)"
 
   return (
     <div className="space-y-8">
@@ -131,54 +133,55 @@ export function AnalysisOutput({ data }: AnalysisOutputProps) {
 
       <Card className="p-6 md:p-8 border-border/50">
         <h3 className="text-xl font-bold mb-6">Engagement Over Time</h3>
-        <ChartContainer
-          config={{
-            engagement: {
-              label: "Engagement Rate",
-              color: "hsl(var(--chart-2))",
-            },
-          }}
-          className="h-[300px]"
-        >
+        <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={engagementOverTime} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis dataKey="date" className="text-xs" />
-              <YAxis className="text-xs" />
-              <ChartTooltip content={<ChartTooltipContent />} />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" opacity={0.3} />
+              <XAxis dataKey="date" className="text-xs" tick={{ fontSize: 12 }} />
+              <YAxis className="text-xs" tick={{ fontSize: 12 }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
+                }}
+                labelStyle={{ color: "hsl(var(--foreground))" }}
+                itemStyle={{ color: chartColor2 }}
+              />
               <Line
                 type="monotone"
                 dataKey="engagement"
-                stroke="var(--color-engagement)"
+                stroke={chartColor2}
                 strokeWidth={2}
-                dot={{ fill: "var(--color-engagement)", r: 4 }}
+                dot={{ fill: chartColor2, r: 4 }}
+                name="Engagement Rate (%)"
               />
             </LineChart>
           </ResponsiveContainer>
-        </ChartContainer>
+        </div>
       </Card>
 
       <Card className="p-6 md:p-8 border-border/50">
         <h3 className="text-xl font-bold mb-6">Content Type Performance</h3>
-        <ChartContainer
-          config={{
-            count: {
-              label: "Engagements",
-              color: "hsl(var(--chart-1))",
-            },
-          }}
-          className="h-[300px]"
-        >
+        <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={contentPerformance} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis dataKey="type" className="text-xs" />
-              <YAxis className="text-xs" />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="count" fill="var(--color-count)" radius={[8, 8, 0, 0]} />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" opacity={0.3} />
+              <XAxis dataKey="type" className="text-xs" tick={{ fontSize: 12 }} />
+              <YAxis className="text-xs" tick={{ fontSize: 12 }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
+                }}
+                labelStyle={{ color: "hsl(var(--foreground))" }}
+                itemStyle={{ color: chartColor1 }}
+              />
+              <Bar dataKey="count" fill={chartColor1} radius={[8, 8, 0, 0]} name="Engagements" />
             </BarChart>
           </ResponsiveContainer>
-        </ChartContainer>
+        </div>
       </Card>
 
       {/* Top Performing Posts */}
